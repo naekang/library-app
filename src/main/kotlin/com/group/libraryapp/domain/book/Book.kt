@@ -23,4 +23,18 @@ class Book(
         }
     }
 
+    companion object {
+        fun fixture(
+            name: String = "책 이름",
+            type: String = "COMPUTER",
+            id: Long? = null,
+        ): Book {
+            return Book(
+                name = name,
+                type = type,
+                id = id
+            )
+        }
+    }
+
 }

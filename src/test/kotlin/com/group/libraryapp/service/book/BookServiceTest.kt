@@ -35,7 +35,7 @@ class BookServiceTest @Autowired constructor(
     @DisplayName("책 저장이 정상 동작한다.")
     fun saveBookTest() {
         // given
-        val request = BookRequest("이상한 나라의 엘리스")
+        val request = BookRequest("이상한 나라의 엘리스", "COMPUTER")
 
         // when
         bookService.saveBook(request)
@@ -44,13 +44,14 @@ class BookServiceTest @Autowired constructor(
         val results = bookRepository.findAll()
         assertEquals(1, results.size)
         assertEquals("이상한 나라의 엘리스", results[0].name)
+        assertEquals("COMPUTER", results[0].type)
     }
 
     @Test
     @DisplayName("책 대출이 정상 동작한다.")
     fun loadBookTest() {
         // given
-        bookRepository.save(Book("이상한 나라의 엘리스"))
+        bookRepository.save(Book.fixture("이상한 나라의 엘리스"))
         val savedUser = userRepository.save(User("김진호", 26))
         val request = BookLoanRequest("김진호", "이상한 나라의 엘리스")
 
@@ -66,10 +67,10 @@ class BookServiceTest @Autowired constructor(
     }
 
     @Test
-    @DisplayName("책이 진작 대출되어 있다면, 신규 대출이 실패한다.")
+    @DisplayName("책이 이미 대출되어 있다면, 신규 대출이 실패한다.")
     fun loanBookFailTest() {
         // given
-        bookRepository.save(Book("이상한 나라의 엘리스"))
+        bookRepository.save(Book.fixture("이상한 나라의 엘리스"))
         val savedUser = userRepository.save(User("김진호", 26))
         userLoanHistoryRepository.save(UserLoanHistory(savedUser, "이상한 나라의 엘리스", false))
         val request = BookLoanRequest("김진호", "이상한 나라의 엘리스")
@@ -79,7 +80,7 @@ class BookServiceTest @Autowired constructor(
             bookService.loanBook(request)
         }.message
 
-        assertEquals("진작 대출되어 있는 책입니다", message)
+        assertEquals("이미 대출되어 있는 책입니다", message)
     }
 
     @Test
