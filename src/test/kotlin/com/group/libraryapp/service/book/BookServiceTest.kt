@@ -136,11 +136,11 @@ class BookServiceTest @Autowired constructor(
 
         // then
         assertEquals(2, results.size)
-        assertCount(results, BookType.COMPUTER, 2)
-        assertCount(results, BookType.SCIENCE, 1)
+        assertCount(results, BookType.COMPUTER, 2L)
+        assertCount(results, BookType.SCIENCE, 1L)
     }
 
-    private fun assertCount(results: List<BookStatResponse>, type: BookType, count: Int) {
+    private fun assertCount(results: List<BookStatResponse>, type: BookType, count: Long) {
         assertEquals(count, results.first { result -> result.type == type }.count)
     }
 
