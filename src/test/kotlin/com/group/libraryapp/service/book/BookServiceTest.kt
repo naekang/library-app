@@ -102,4 +102,22 @@ class BookServiceTest @Autowired constructor(
         assertEquals(UserLoanStatus.RETURNED, results[0].status)
     }
 
+    @Test
+    @DisplayName("책 대여 권수를 정상 확인한다.")
+    fun countLoanedBookTest() {
+        // given
+        val savedUser = userRepository.save(User("내캉", null))
+        userLoanHistoryRepository.saveAll(listOf(
+            UserLoanHistory.fixture(savedUser, "A"),
+            UserLoanHistory.fixture(savedUser, "B", UserLoanStatus.RETURNED),
+            UserLoanHistory.fixture(savedUser, "C", UserLoanStatus.RETURNED)
+        ))
+
+        // when
+        val result = bookService.countLoanedBook()
+
+        // then
+        assertEquals(1, result)
+    }
+
 }
